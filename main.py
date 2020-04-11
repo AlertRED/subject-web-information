@@ -1,6 +1,16 @@
 import nltk
 from sklearn.feature_extraction.text import CountVectorizer
 import os
+import re
+
+REPLACE_NO_SPACE = re.compile("[.;:!\'?,\"()\[\]]")
+REPLACE_WITH_SPACE = re.compile("(<br\s*/><br\s*/>)|(\-)|(\/)")
+
+
+def preprocess_reviews(reviews):
+    reviews = [REPLACE_NO_SPACE.sub("", line.lower()) for line in reviews]
+    reviews = [REPLACE_WITH_SPACE.sub(" ", line) for line in reviews]
+    return reviews
 
 
 def get_corpus(path, file_limit=-1):
@@ -34,6 +44,7 @@ def sort_matrix(matrix):
 
 # Work
 corpus = get_corpus(path="dataset\\train\\neg", file_limit=20)
+corpus = preprocess_reviews(corpus)
 cv = CountVectorizer(stop_words='english')
 bag_of_words = cv.fit_transform(corpus)
 feature_names = cv.get_feature_names()
