@@ -16,7 +16,7 @@ to understand either it is positve comment or negative.
         nltk.download("all")
 4. Download archive of tests and trains
     
-    http://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.gz
+    http://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz
 
 ### Description
     
