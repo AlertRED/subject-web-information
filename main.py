@@ -43,12 +43,6 @@ class ML:
                     corpus += nltk.sent_tokenize(document_text)
         return ML.__preprocess_reviews(corpus)
 
-    @staticmethod
-    def sort_matrix(matrix):
-        """Sort matrix"""
-        tuples = zip(matrix.col, matrix.data)
-        return sorted(tuples, key=lambda x: (x[1], x[0]), reverse=True)
-
     def __init__(self, dir_trains, dir_tests, count_best):
         self.dir_trains = dir_trains
         self.dir_tests = dir_tests
