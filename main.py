@@ -4,6 +4,13 @@ import os
 
 
 def get_corpus(path, file_limit=-1):
+    """Return list of sentences from txt-s
+
+    :param path: is path to directory with txt-s
+    :param file_limit: how many files need to read (-1 unlimited)
+    :return: list of sentences
+    """
+
     corpus = []
     for root, dir, files in os.walk(path, topdown=False):
         for i, file_name in enumerate(files):
@@ -20,19 +27,21 @@ def get_corpus(path, file_limit=-1):
     return corpus
 
 
-def sort_coo(coo_matrix):
-    tuples = zip(coo_matrix.col, coo_matrix.data)
+def sort_matrix(matrix):
+    """Sort matrix"""
+    tuples = zip(matrix.col, matrix.data)
     return sorted(tuples, key=lambda x: (x[1], x[0]), reverse=True)
 
-
+# Work
 corpus = get_corpus(path="dataset\\train\\neg", file_limit=20)
 cv = CountVectorizer(stop_words='english')
 bag_of_words = cv.fit_transform(corpus)
 feature_names = cv.get_feature_names()
 
+# Output
 rows, words = bag_of_words.shape
 print("rows: %s | words: %s" % (rows, words))
 print("Top popular words:")
 print("word | weight")
-for i in sort_coo(bag_of_words.tocoo())[:10]:
+for i in sort_matrix(bag_of_words.tocoo())[:10]:
     print(feature_names[i[0]], i[1])
