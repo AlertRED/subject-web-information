@@ -3,11 +3,11 @@ from sklearn.feature_extraction.text import CountVectorizer
 import os
 
 
-def get_corpus(path, limit=-1):
+def get_corpus(path, file_limit=-1):
     corpus = []
     for root, dir, files in os.walk(path, topdown=False):
         for i, file_name in enumerate(files):
-            if i == limit:
+            if i == file_limit:
                 break
             path = os.path.join(root, file_name)
             with open(path, "r") as file:
@@ -25,7 +25,7 @@ def sort_coo(coo_matrix):
     return sorted(tuples, key=lambda x: (x[1], x[0]), reverse=True)
 
 
-corpus = get_corpus(path="dataset\\train\\neg", limit=20)
+corpus = get_corpus(path="dataset\\train\\neg", file_limit=20)
 cv = CountVectorizer(stop_words='english')
 bag_of_words = cv.fit_transform(corpus)
 feature_names = cv.get_feature_names()
