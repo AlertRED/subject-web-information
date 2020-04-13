@@ -9,17 +9,17 @@ from sklearn.model_selection import train_test_split
 
 
 class ML:
-
-    REPLACE_NO_SPACE = re.compile("[.;:!\'?,\"()\[\]]")
-    REPLACE_WITH_SPACE = re.compile("(<br\s*/><br\s*/>)|(\-)|(\/)")
+    _REPLACE_NO_SPACE = re.compile("[.;:!\'?,\"()\[\]]")
+    _REPLACE_WITH_SPACE = re.compile("(<br\s*/><br\s*/>)|(\-)|(\/)")
+    _NOT_RUNED_MESSAGE = 'Firstly will use \'run\' method'
 
     @staticmethod
-    def __preprocess_reviews(reviews):
-        reviews = [ML.REPLACE_NO_SPACE.sub("", line.lower()) for line in reviews]
-        reviews = [ML.REPLACE_WITH_SPACE.sub(" ", line) for line in reviews]
+    def _preprocess_reviews(reviews):
+        reviews = [ML._REPLACE_NO_SPACE.sub("", line.lower()) for line in reviews]
+        reviews = [ML._REPLACE_WITH_SPACE.sub(" ", line) for line in reviews]
         return reviews
 
-    def __get_corpus(self, path):
+    def _get_corpus(self, path):
         """Return list of sentences from txt-s
 
         :param path: is path to directory with txt-s
@@ -40,16 +40,32 @@ class ML:
                         print(file_name, e)
                         continue
                     corpus += nltk.sent_tokenize(document_text)
-        return ML.__preprocess_reviews(corpus)
+        return ML._preprocess_reviews(corpus)
 
-    def __init__(self, dir_trains, dir_tests, count_best, files_limit=-1):
+    def __init__(self, dir_trains, dir_tests, files_limit=-1):
         self.dir_trains = dir_trains
         self.dir_tests = dir_tests
-        self.count_best = count_best
         self.files_limit = files_limit
+        self.feature_to_coef = None
+        self.feature_to_coef_sorted = None
+
+    def get_best_positive(self, count=1):
+        if self.feature_to_coef_sorted:
+            return self.feature_to_coef_sorted[-1:-count - 1:-1]
+        raise Exception(ML._NOT_RUNED_MESSAGE)
+
+    def get_best_negative(self, count=1):
+        if self.feature_to_coef_sorted:
+            return self.feature_to_coef_sorted[:count]
+        raise Exception(ML._NOT_RUNED_MESSAGE)
+
+    def get_coef(self, word):
+        if self.feature_to_coef:
+            return self.feature_to_coef.get(word, None)
+        raise Exception(ML._NOT_RUNED_MESSAGE)
 
     def run(self):
-        corpus = self.__get_corpus(path=self.dir_trains)
+        corpus = self._get_corpus(path=self.dir_trains)
         cv = CountVectorizer(stop_words='english')
         X = cv.fit_transform(corpus)
 
@@ -59,18 +75,15 @@ class ML:
         final_model = LogisticRegression()
         final_model.fit(X=X, y=y)
 
-        feature_to_coef = {word: coef for word, coef in zip(cv.get_feature_names(), final_model.coef_[0])}
-
-        print('Best positive')
-        for best_positive in sorted(feature_to_coef.items(), key=lambda x: x[1], reverse=True)[:self.count_best]:
-            print(best_positive)
-
-        print('Best negative')
-        for best_negative in sorted(feature_to_coef.items(), key=lambda x: x[1])[:self.count_best]:
-            print(best_negative)
+        self.feature_to_coef = {word: coef for word, coef in
+                                sorted(zip(cv.get_feature_names(), final_model.coef_[0]), key=lambda x: x[1])}
+        self.feature_to_coef_sorted = sorted(zip(cv.get_feature_names(), final_model.coef_[0]), key=lambda x: x[1])
 
 
-dir_trains="dataset\\train\\neg"
-dir_tests="dataset\\test\\neg"
-ml = ML(dir_trains, dir_tests, count_best=10, files_limit=20)
+dir_trains = "dataset\\train\\neg"
+dir_tests = "dataset\\test\\neg"
+ml = ML(dir_trains, dir_tests, files_limit=20)
+print(ml.get_best_positive(2))
 ml.run()
+print(ml.get_best_positive(2))
+print(ml.get_best_negative(2))
