@@ -1,5 +1,3 @@
-import pickle
-
 import joblib
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
@@ -20,33 +18,37 @@ class ML:
         self._train_y = corpus.target
         self._model = RandomForestClassifier(n_estimators=18)
         self._model.fit(X=X, y=self._train_y)
+        return self
 
     def save_model(self, filename):
-        if self._model:
-            joblib.dump(self._model, '%s.pkl' % filename, compress=9)
-        else:
-            raise Exception('Model is empty. Train the model first')
+        self._save_file(self._model, filename, 'Model')
+        return self
 
     def save_vectorizer(self, filename):
-        if self._vectorizer:
-            joblib.dump(self._vectorizer, '%s.vec' % filename, compress=9)
-        else:
-            raise Exception('Vectorizer is empty. Train the model first')
+        self._save_file(self._vectorizer, filename, 'Vectorizer')
+        return self
 
     def save_train_y(self, filename):
-            if self._vectorizer:
-                joblib.dump(self._train_y, '%s.wght' % filename, compress=9)
-            else:
-                raise Exception('Weights is empty. Train the model first')
+        self._save_file(self._train_y, filename, 'Weight')
+        return self
 
     def load_vectorizer(self, filename):
         self._vectorizer = joblib.load('%s.vec' % filename)
+        return self
 
     def load_model(self, filename):
         self._model = joblib.load('%s.pkl' % filename)
+        return self
 
     def load_train_y(self, filename):
         self._train_y = joblib.load('%s.wght' % filename)
+        return self
+
+    def _save_file(self, variable, filename, err_name: str, compress=9):
+        if variable is not None:
+            joblib.dump(variable, '%s.wght' % filename, compress=compress)
+        else:
+            raise Exception('%s is empty. Train the model first' % err_name)
 
     def testing(self, dir_tests):
         if self._model:
@@ -59,16 +61,11 @@ class ML:
 
 
 dir_trains = "dataset\\_train"
-dir_tests = "dataset\\_test"
+dir_tests = "dataset\\test"
 
 ml = ML()
 # ml.train(dir_trains)
-# ml.save_model('wtf_sm')
-# ml.save_vectorizer('wtf_sm')
-# ml.save_train_y('wtf_sm')
-ml.load_vectorizer('wtf_sm')
-ml.load_model('wtf_sm')
-ml.load_train_y('wtf_sm')
+# ml.save_model('wtf_sm').save_vectorizer('wtf_sm').save_train_y('wtf_sm')
+ml.load_vectorizer('wtf').load_model('wtf').load_train_y('wtf')
 y, accuracy = ml.testing(dir_tests)
-
 print(accuracy)
