@@ -9,7 +9,7 @@ class ML:
 
     def __init__(self):
         self._model = None
-        self._vectorizer = TfidfVectorizer(stop_words='english')
+        self._vectorizer = None
 
     def save_model(self, filename):
         self._save_file(self._model, filename, 'pkl', 'Model')
@@ -33,20 +33,19 @@ class ML:
         else:
             raise Exception('%s is empty. Train the model first' % err_name)
 
-    def train(self, dir_trains, max_iter=1e5):
+    def train(self, dir_trains, max_iter=1e5, C=5):
+        self._vectorizer = TfidfVectorizer(stop_words='english')
+        self._model = LogisticRegression(C=C, max_iter=max_iter)
         corpus = load_files(dir_trains, encoding='utf-8')
-        X = self._vectorizer.fit_transform(corpus.data)
-        y = corpus.target
-        self._model = LogisticRegression(C=5, max_iter=max_iter)
+        X, y = self._vectorizer.fit_transform(corpus.data), corpus.target
         self._model.fit(X=X, y=y)
         return self
 
     def test(self, dir_tests):
         if self._model:
             corpus = load_files(dir_tests)
-            X = self._vectorizer.transform(corpus.data)
+            X, y = self._vectorizer.transform(corpus.data), corpus.target
             predict = self._model.predict(X=X)
-            y = corpus.target
             return accuracy_score(y, predict)
         raise Exception("Model did't train")
 
