@@ -1,10 +1,8 @@
 import joblib
-from sklearn import preprocessing
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.linear_model import LinearRegression, LogisticRegression
+from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 from sklearn.datasets import load_files
-from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 
 class ML:
@@ -39,7 +37,7 @@ class ML:
         corpus = load_files(dir_trains, encoding='utf-8')
         X = self._vectorizer.fit_transform(corpus.data)
         y = corpus.target
-        self._model = LogisticRegression(C=1e3, max_iter=max_iter)
+        self._model = LogisticRegression(C=5, max_iter=max_iter)
         self._model.fit(X=X, y=y)
         return self
 
@@ -53,13 +51,14 @@ class ML:
         raise Exception("Model did't train")
 
 
-dir_trains = "dataset\\train"
-dir_tests = "dataset\\test"
-file_name = 'wtf'
+if __name__ == '__main__':
+    dir_trains = "dataset\\train"
+    dir_tests = "dataset\\test"
+    file_name = 'wtf'
 
-ml = ML()
-ml.train(dir_trains)
-# ml.save_vectorizer(file_name)
-# ml.save_model(file_name)
-accuracy = ml.testing(dir_tests)
-print(accuracy)
+    ml = ML()
+    ml.train(dir_trains)
+    # ml.save_vectorizer(file_name)
+    # ml.save_model(file_name)
+    accuracy = ml.testing(dir_tests)
+    print(accuracy)
