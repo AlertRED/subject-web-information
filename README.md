@@ -8,11 +8,14 @@ to understand either it is positve comment or negative.
 ## Install
 ### Requirements
 
-        pip install -r requirements.txt
+    pip install -r requirements.txt
 * Python3.7
 * Conda 4.8.3
+## Datasets
+When working on the project used dataset:
+http://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz
 
-### Description class
+## Description class
 
 train - Trains a model on data.
     
