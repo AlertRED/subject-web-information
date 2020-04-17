@@ -12,11 +12,35 @@ to understand either it is positve comment or negative.
 * Python3.7
 * Conda 4.8.3
 ## Datasets
-When working on the project used dataset:
+When working on the project used dataset
+
 http://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz
 
-## Description class
-
+## Usage
+### ML class
 train - Trains a model on data.
+
+test - Testing a model on data.
+
+save_model - Saves model with .pkl extension
+
+save_vectorizer - Saves vectors with .vec extension
+
+load_model - Loads a trained model from a file
+
+load_vectorizer - Loads vectors from a file
+
+### Example
+
+    from main import Ml
+    
+    dir_trains = "dataset\\train"
+    dir_tests = "dataset\\test"
+    
+    ml = ML()
+    ml.train(dir_trains)
+    accuracy = ml.test(dir_tests)
+    print(accuracy)
+ 
     
 
