@@ -5,19 +5,15 @@ which have positvie expression and negative expression and
 also mention the intensity along with them. after that if you 
 pass any comment to your classifier then it must be smart enough 
 to understand either it is positve comment or negative.
-### Install
-1. Install Conda and create env
-2. Install requirements.txt
+## Install
+### Requirements
 
-        pip3 install -r requirements.txt
-3. Download pacages in console python
+        pip install -r requirements.txt
+* Python3.7
+* Conda 4.8.3
 
-        import nltk
-        nltk.download("all")
-4. Download archive of tests and trains
-    
-    http://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz
+### Description class
 
-### Description
+train - Trains a model on data.
     
 
