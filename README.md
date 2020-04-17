@@ -18,29 +18,29 @@ http://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz
 
 ## Usage
 ### ML class
-train - Trains a model on data.
+* train - Trains a model on data.
 
-test - Testing a model on data.
+* test - Testing a model on data.
 
-save_model - Saves model with .pkl extension
+* save_model - Saves model with .pkl extension
 
-save_vectorizer - Saves vectors with .vec extension
+* save_vectorizer - Saves vectors with .vec extension
 
-load_model - Loads a trained model from a file
+* load_model - Loads a trained model from a file
 
-load_vectorizer - Loads vectors from a file
+* load_vectorizer - Loads vectors from a file
 
-### Example
+### Example code
+```python
+from main import Ml
 
-    from main import Ml
-    
-    dir_trains = "dataset\\train"
-    dir_tests = "dataset\\test"
-    
-    ml = ML()
-    ml.train(dir_trains)
-    accuracy = ml.test(dir_tests)
-    print(accuracy)
- 
+dir_trains = "dataset\\train"
+dir_tests = "dataset\\test"
+
+ml = ML()
+ml.train(dir_trains)
+accuracy = ml.test(dir_tests)
+print(accuracy)
+```
     
 
