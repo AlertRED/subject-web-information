@@ -27,7 +27,8 @@ class ML:
         self._model = joblib.load('%s.pkl' % filename)
         return self
 
-    def _save_file(self, variable, filename, type, err_name: str, compress=9):
+    @staticmethod
+    def _save_file(variable, filename, type, err_name: str, compress=9):
         if variable is not None:
             joblib.dump(variable, '%s.%s' % (filename, type), compress=compress)
         else:
