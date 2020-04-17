@@ -41,7 +41,7 @@ class ML:
         self._model.fit(X=X, y=y)
         return self
 
-    def testing(self, dir_tests):
+    def test(self, dir_tests):
         if self._model:
             corpus = load_files(dir_tests)
             X = self._vectorizer.transform(corpus.data)
@@ -60,5 +60,5 @@ if __name__ == '__main__':
     ml.train(dir_trains)
     # ml.save_vectorizer(file_name)
     # ml.save_model(file_name)
-    accuracy = ml.testing(dir_tests)
+    accuracy = ml.test(dir_tests)
     print(accuracy)
